@@ -1,7 +1,14 @@
 #!/bin/bash
 
 # macOS Developer Setup Script
+# Author: Abinyah Walker
+# Date: October 2025
 # This script installs development tools and applications after a fresh macOS install
+#
+# DISCLAIMER: This script is provided "as is" without warranty of any kind.
+# Use at your own risk. The author assumes no responsibility for any damage
+# or issues that may arise from using this script.
+# For comments or support, contact: info@mydmdi.com
 
 set -e  # Exit on any error
 
@@ -279,6 +286,8 @@ show_menu() {
     echo ""
     echo "6. Install Everything (Recommended for first-time setup)"
     echo ""
+    echo "7. View Author & Warranty Information"
+    echo ""
     echo "0. Exit"
     echo ""
 }
@@ -286,11 +295,11 @@ show_menu() {
 # Function to get user choice
 get_user_choice() {
     while true; do
-        echo -n "Enter your choice (0-6): "
+        echo -n "Enter your choice (0-7): " >&2
         read -r choice
         case $choice in
-            [0-6]) return "$choice" ;;
-            *) echo -e "${RED}Invalid choice. Please enter a number between 0-6.${NC}" ;;
+            [0-7]) echo "$choice"; return ;;
+            *) echo -e "${RED}Invalid choice. Please enter a number between 0-7.${NC}" >&2 ;;
         esac
     done
 }
@@ -306,6 +315,25 @@ confirm_installation() {
         [Yy]|[Yy][Ee][Ss]) return 0 ;;
         *) return 1 ;;
     esac
+}
+
+# Function to display author and warranty information
+show_author_info() {
+    echo ""
+    echo "=========================================="
+    echo "    Author & Warranty Information"
+    echo "=========================================="
+    echo ""
+    echo "Author: Abinyah Walker"
+    echo "Date: October 2025"
+    echo ""
+    echo "DISCLAIMER:"
+    echo "This script is provided 'as is' without warranty of any kind."
+    echo "Use at your own risk. The author assumes no responsibility for any damage"
+    echo "or issues that may arise from using this script."
+    echo ""
+    echo "For comments or support, contact: info@mydmdi.com"
+    echo ""
 }
 
 # Main execution
@@ -326,8 +354,7 @@ main() {
     
     while true; do
         show_menu
-        get_user_choice
-        choice=$?
+        choice=$(get_user_choice)
         
         case $choice in
             0)
@@ -378,6 +405,9 @@ main() {
                     setup_shell
                     print_success "All components installed successfully!"
                 fi
+                ;;
+            7)
+                show_author_info
                 ;;
         esac
         
