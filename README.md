@@ -13,7 +13,11 @@ A comprehensive script to set up your macOS development environment after a fres
 
 ## Screenshots
 
-<img width="538" height="471" alt="Screenshot 2025-10-19 at 11 45 33 AM" src="https://github.com/user-attachments/assets/c61b4265-12aa-4f12-b048-5a40107dd8d7" />
+<img width="549" height="559" alt="Screenshot 2025-10-19 at 1 40 26 PM" src="https://github.com/user-attachments/assets/24dd8b1a-aea4-4fc5-9b0b-d402c36d0580" />
+
+# System Analysis and Recommendations.
+
+<img width="746" height="776" alt="Screenshot 2025-10-19 at 1 41 00 PM" src="https://github.com/user-attachments/assets/2312e674-5191-49c3-a5fd-1ea4aa513065" />
 
 
 ## Quick Start
