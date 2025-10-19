@@ -288,6 +288,8 @@ show_menu() {
     echo ""
     echo "7. View Author & Warranty Information"
     echo ""
+    echo "8. System Analysis & Recommendations"
+    echo ""
     echo "0. Exit"
     echo ""
 }
@@ -295,11 +297,11 @@ show_menu() {
 # Function to get user choice
 get_user_choice() {
     while true; do
-        echo -n "Enter your choice (0-7): " >&2
+        echo -n "Enter your choice (0-8): " >&2
         read -r choice
         case $choice in
-            [0-7]) echo "$choice"; return ;;
-            *) echo -e "${RED}Invalid choice. Please enter a number between 0-7.${NC}" >&2 ;;
+            [0-8]) echo "$choice"; return ;;
+            *) echo -e "${RED}Invalid choice. Please enter a number between 0-8.${NC}" >&2 ;;
         esac
     done
 }
@@ -336,8 +338,222 @@ show_author_info() {
     echo ""
 }
 
+# Function to analyze system and provide recommendations
+analyze_system() {
+    print_header "System Analysis & Recommendations"
+    
+    echo -e "${CYAN}Analyzing your system...${NC}"
+    echo ""
+    
+    local recommendations=()
+    local installed_count=0
+    local total_count=0
+    local missing_apps=()
+    
+    # First, let's see what's actually installed in /Applications
+    echo -e "${YELLOW}📁 Scanning /Applications folder...${NC}"
+    installed_apps=()
+    if [ -d "/Applications" ]; then
+        while IFS= read -r -d '' app; do
+            app_name=$(basename "$app" .app)
+            installed_apps+=("$app_name")
+        done < <(find /Applications -maxdepth 1 -name "*.app" -print0 2>/dev/null)
+    fi
+    
+    echo -e "Found ${#installed_apps[@]} applications in /Applications folder"
+    echo ""
+    
+    # Check Homebrew
+    echo -e "${YELLOW}Checking Homebrew...${NC}"
+    if command_exists brew; then
+        echo -e "  ${GREEN}✓${NC} Homebrew is installed"
+        installed_count=$((installed_count + 1))
+    else
+        echo -e "  ${RED}✗${NC} Homebrew is not installed"
+        recommendations+=("1")
+    fi
+    total_count=$((total_count + 1))
+    
+    # Check Xcode Command Line Tools
+    echo -e "${YELLOW}Checking Xcode Command Line Tools...${NC}"
+    if xcode-select -p >/dev/null 2>&1; then
+        echo -e "  ${GREEN}✓${NC} Xcode Command Line Tools are installed"
+        installed_count=$((installed_count + 1))
+    else
+        echo -e "  ${RED}✗${NC} Xcode Command Line Tools are not installed"
+        recommendations+=("1")
+    fi
+    total_count=$((total_count + 1))
+    
+    # Check essential development tools
+    echo -e "${YELLOW}Checking Essential Development Tools...${NC}"
+    local essential_tools=("git" "node" "python3" "ruby" "wget" "curl" "jq" "tree" "htop")
+    local missing_essential=()
+    
+    for tool in "${essential_tools[@]}"; do
+        if command_exists "$tool"; then
+            echo -e "  ${GREEN}✓${NC} $tool is installed"
+        else
+            echo -e "  ${RED}✗${NC} $tool is not installed"
+            missing_essential+=("$tool")
+        fi
+    done
+    
+    if [ ${#missing_essential[@]} -gt 0 ]; then
+        recommendations+=("1")
+    fi
+    
+    # Check development applications with better matching
+    echo -e "${YELLOW}Checking Development Applications...${NC}"
+    local dev_apps=("Visual Studio Code" "Cursor" "Sublime Text" "Postman" "Figma" "Docker" "Ghostty" "iTerm2" "Hyper" "Insomnia" "DBeaver" "Sequel Pro" "MySQLWorkbench")
+    local missing_dev=()
+    local found_dev=()
+    
+    for app in "${dev_apps[@]}"; do
+        local found=false
+        for installed in "${installed_apps[@]}"; do
+            if [[ "$installed" == *"$app"* ]] || [[ "$app" == *"$installed"* ]]; then
+                echo -e "  ${GREEN}✓${NC} $app is installed (found: $installed)"
+                found_dev+=("$app")
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $app is not installed"
+            missing_dev+=("$app")
+        fi
+    done
+    
+    if [ ${#missing_dev[@]} -gt 0 ]; then
+        recommendations+=("2")
+    fi
+    
+    # Check professional applications with better matching
+    echo -e "${YELLOW}Checking Professional Applications...${NC}"
+    local prof_apps=("1Password" "Adobe Creative Cloud" "Photoshop" "Lightroom" "Final Cut Pro" "Logic Pro" "iMovie" "GarageBand" "Keynote" "Pages" "Numbers" "Sketch" "Principle" "Framer")
+    local missing_prof=()
+    local found_prof=()
+    
+    for app in "${prof_apps[@]}"; do
+        local found=false
+        for installed in "${installed_apps[@]}"; do
+            if [[ "$installed" == *"$app"* ]] || [[ "$app" == *"$installed"* ]]; then
+                echo -e "  ${GREEN}✓${NC} $app is installed (found: $installed)"
+                found_prof+=("$app")
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $app is not installed"
+            missing_prof+=("$app")
+        fi
+    done
+    
+    if [ ${#missing_prof[@]} -gt 0 ]; then
+        recommendations+=("3")
+    fi
+    
+    # Check communication apps with better matching
+    echo -e "${YELLOW}Checking Communication & Productivity Apps...${NC}"
+    local comm_apps=("Slack" "Google Chrome" "Chrome" "Firefox" "Zoom" "Google Drive" "Microsoft Office" "Word" "Excel" "PowerPoint" "Notion" "Obsidian" "Bear" "Todoist" "Toggl")
+    local missing_comm=()
+    local found_comm=()
+    
+    for app in "${comm_apps[@]}"; do
+        local found=false
+        for installed in "${installed_apps[@]}"; do
+            if [[ "$installed" == *"$app"* ]] || [[ "$app" == *"$installed"* ]]; then
+                echo -e "  ${GREEN}✓${NC} $app is installed (found: $installed)"
+                found_comm+=("$app")
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $app is not installed"
+            missing_comm+=("$app")
+        fi
+    done
+    
+    if [ ${#missing_comm[@]} -gt 0 ]; then
+        recommendations+=("4")
+    fi
+    
+    # Check utilities with better matching
+    echo -e "${YELLOW}Checking Utilities...${NC}"
+    local util_apps=("Maccy" "Awesome Screenshot" "Rectangle" "Alfred" "CleanMyMac" "Bartender" "BetterTouchTool" "Karabiner" "Hazel" "Dropzone")
+    local missing_util=()
+    local found_util=()
+    
+    for app in "${util_apps[@]}"; do
+        local found=false
+        for installed in "${installed_apps[@]}"; do
+            if [[ "$installed" == *"$app"* ]] || [[ "$app" == *"$installed"* ]]; then
+                echo -e "  ${GREEN}✓${NC} $app is installed (found: $installed)"
+                found_util+=("$app")
+                found=true
+                break
+            fi
+        done
+        if [ "$found" = false ]; then
+            echo -e "  ${RED}✗${NC} $app is not installed"
+            missing_util+=("$app")
+        fi
+    done
+    
+    if [ ${#missing_util[@]} -gt 0 ]; then
+        recommendations+=("5")
+    fi
+    
+    # Calculate total installed apps
+    local total_found=$(( ${#found_dev[@]} + ${#found_prof[@]} + ${#found_comm[@]} + ${#found_util[@]} ))
+    local total_checked=$(( ${#dev_apps[@]} + ${#prof_apps[@]} + ${#comm_apps[@]} + ${#util_apps[@]} ))
+    
+    echo ""
+    echo "=========================================="
+    echo -e "${CYAN}ANALYSIS SUMMARY${NC}"
+    echo "=========================================="
+    echo -e "Core System: ${GREEN}$installed_count${NC} out of $total_count components"
+    echo -e "Applications: ${GREEN}$total_found${NC} out of $total_checked checked"
+    echo -e "Total Apps in /Applications: ${CYAN}${#installed_apps[@]}${NC}"
+    echo ""
+    
+    if [ ${#recommendations[@]} -eq 0 ]; then
+        echo -e "${GREEN}🎉 Congratulations! Your system appears to be fully set up.${NC}"
+        echo -e "All major development tools and applications are installed."
+    else
+        echo -e "${YELLOW}📋 RECOMMENDATIONS:${NC}"
+        echo ""
+        
+        # Remove duplicates and sort recommendations
+        local unique_recommendations=($(printf '%s\n' "${recommendations[@]}" | sort -u))
+        
+        for rec in "${unique_recommendations[@]}"; do
+            case $rec in
+                1) echo -e "  ${CYAN}Option 1:${NC} Essential Development Tools - Install Homebrew, Xcode tools, and core development packages" ;;
+                2) echo -e "  ${CYAN}Option 2:${NC} Development Applications - Install VS Code, Cursor, Docker, and other dev tools" ;;
+                3) echo -e "  ${CYAN}Option 3:${NC} Professional Applications - Install 1Password, Adobe Creative Suite, Final Cut Pro, etc." ;;
+                4) echo -e "  ${CYAN}Option 4:${NC} Communication & Productivity - Install Slack, Chrome, Zoom, and productivity apps" ;;
+                5) echo -e "  ${CYAN}Option 5:${NC} Utilities - Install Maccy, Rectangle, Alfred, and system utilities" ;;
+            esac
+        done
+        
+        echo ""
+        if [ ${#unique_recommendations[@]} -gt 3 ]; then
+            echo -e "${PURPLE}💡 Tip:${NC} Consider running ${CYAN}Option 6 (Install Everything)${NC} for a complete setup"
+        fi
+    fi
+    
+    echo ""
+    echo -e "${GREEN}Press any key to return to the main menu...${NC}"
+    read -n 1 -s
+}
+
 # Main execution
 main() {
+    clear
     print_header "macOS Developer Setup"
     
     # Check if running on macOS
@@ -408,6 +624,9 @@ main() {
                 ;;
             7)
                 show_author_info
+                ;;
+            8)
+                analyze_system
                 ;;
         esac
         
