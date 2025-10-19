@@ -1,0 +1,53 @@
+# Development Applications
+visual-studio-code
+cursor
+sublime-text
+postman
+figma
+docker
+ghostty
+iterm2
+hyper
+insomnia
+dbeaver-community
+sequel-pro
+mysqlworkbench
+
+# Professional Applications
+1password
+adobe-creative-cloud
+final-cut-pro
+logic-pro
+imovie
+garageband
+keynote
+pages
+numbers
+sketch
+principle
+framer
+
+# Communication & Productivity
+slack
+google-chrome
+firefox
+zoom
+google-drive
+microsoft-office
+notion
+obsidian
+bear
+todoist
+toggl-track
+
+# Utilities
+maccy
+awesome-screenshot-and-recorder
+rectangle
+alfred
+cleanmymac
+bartender
+bettertouchtool
+karabiner-elements
+hazel
+dropzone

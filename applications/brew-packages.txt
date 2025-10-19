@@ -1,0 +1,21 @@
+# Essential Development Tools
+git
+gh
+node
+python@3.11
+ruby
+wget
+curl
+jq
+tree
+htop
+neofetch
+zsh
+zsh-autosuggestions
+zsh-syntax-highlighting
+fzf
+ripgrep
+fd
+bat
+exa
+tldr
