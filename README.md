@@ -11,6 +11,15 @@ A comprehensive script to set up your macOS development environment after a fres
 - 🎨 **Professional Tools**: Installs Adobe Creative Suite, Final Cut Pro, and other professional applications
 - 🔧 **Customizable**: Interactive CLI with options to select what to install
 
+## Screenshots
+
+<img width="549" height="559" alt="Screenshot 2025-10-19 at 1 40 26 PM" src="https://github.com/user-attachments/assets/24dd8b1a-aea4-4fc5-9b0b-d402c36d0580" />
+
+# System Analysis and Recommendations.
+
+<img width="746" height="776" alt="Screenshot 2025-10-19 at 1 41 00 PM" src="https://github.com/user-attachments/assets/2312e674-5191-49c3-a5fd-1ea4aa513065" />
+
+
 ## Quick Start
 
 1. Clone this repository:
